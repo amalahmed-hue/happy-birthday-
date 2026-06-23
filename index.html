@@ -112,34 +112,28 @@ button {
     transform: scale(1.1);
 }
 
-/* ENVELOPE (UPDATED COLOR) */
-.envelope {
-    width: 250px;
-    height: 160px;
-    background: #8fd3ff; /* LIGHT BLUE */
-    margin: 40px auto;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 0 25px rgba(143,211,255,0.6);
-    animation: floatIn 0.6s ease;
-}
+<div id="envelopeScreen" class="screen">
 
-@keyframes floatIn {
-    from {transform: translateY(15px); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
-}
+    <p style="font-size:18px;">
+        I hope I make you feel as loved as you make me feel. Here's a little something 🤍
+    </p>
 
-.envelope::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 125px solid transparent;
-    border-right: 125px solid transparent;
-    border-top: 80px solid #6bbbe8;
-}
+    <div class="envelope" id="envelope" onclick="toggleEnvelope()"></div>
+
+    <div class="letter" id="letter">
+        <p style="font-family:'Great Vibes', cursive; font-size:28px; margin:0;">
+            Amal
+        </p>
+
+        <p style="opacity:0.7; margin-top:-5px;">
+            to Sarim
+        </p>
+
+        <hr>
+
+        <p>Your handwritten letter goes here later ❤️</p>
+    </div>
+</div>
 
 /* LETTER */
 .letter {
