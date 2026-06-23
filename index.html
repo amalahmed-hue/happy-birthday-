@@ -1,0 +1,75 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <style>
+        :root {
+            --pastel-blue: #d1e8ff;
+            --soft-blue: #a3cfff;
+            --navy: #2c3e50;
+            --white: #ffffff;
+        }
+
+        body { margin: 0; font-family: sans-serif; background: var(--pastel-blue); display: flex; justify-content: center; align-items: center; height: 100vh; }
+
+        /* Login Screen */
+        #login { text-align: center; color: var(--navy); }
+        input { padding: 12px; border: 2px solid var(--soft-blue); border-radius: 10px; margin-bottom: 10px; text-align: center; background: var(--white); }
+        button { padding: 10px 20px; background: var(--soft-blue); border: none; color: white; border-radius: 10px; cursor: pointer; }
+
+        /* Envelope Area */
+        #envelope-stage { display: none; perspective: 1000px; }
+        .envelope { width: 250px; height: 180px; background: var(--soft-blue); border-radius: 10px; position: relative; cursor: pointer; transition: 0.6s; transform-style: preserve-3d; border: 2px solid var(--white); }
+        .envelope.flipped { transform: rotateY(180deg); }
+        
+        .flap { position: absolute; top: 0; border-left: 125px solid transparent; border-right: 125px solid transparent; border-top: 90px solid var(--pastel-blue); transition: 0.5s; }
+        
+        /* The Letter Animation */
+        #letter { position: absolute; top: 10px; left: 10px; width: 230px; height: 160px; background: var(--white); transition: 1s; opacity: 0; z-index: -1; padding: 5px; }
+        .open .flap { transform: rotateX(180deg); }
+        .open #letter { opacity: 1; transform: translateY(-100px); z-index: 10; }
+    </style>
+</head>
+<body>
+
+    <div id="login">
+        <p>What is the name of our playlist?</p>
+        <input type="text" id="pass" placeholder="lowercase only">
+        <br>
+        <button onclick="check()">Enter</button>
+    </div>
+
+    <div id="envelope-stage">
+        <!-- Click to flip, double click to open -->
+        <div class="envelope" id="env" onclick="this.classList.toggle('flipped')" ondblclick="openEnv()">
+            <div class="flap"></div>
+            <div id="letter">
+                <img src="letter.png" style="width:100%; height:100%; object-fit:contain;">
+            </div>
+        </div>
+        <p style="text-align:center; color: var(--navy); font-size: 0.8em; margin-top: 20px;">
+            Tap once to flip, double-tap to open.
+        </p>
+    </div>
+
+    <script>
+        function check() {
+            if(document.getElementById('pass').value.toLowerCase() === "sweet as cupcake") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('envelope-stage').style.display = 'block';
+            } else {
+                alert("Not the right playlist!");
+            }
+        }
+
+        function openEnv() {
+            document.getElementById('env').classList.add('open');
+        }
+    </script>
+</body>
+</html>
+
+```
