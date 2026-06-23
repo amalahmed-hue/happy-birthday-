@@ -28,8 +28,13 @@
         
         /* The Letter Animation */
         #letter { position: absolute; top: 10px; left: 10px; width: 230px; height: 160px; background: var(--white); transition: 1s; opacity: 0; z-index: -1; padding: 5px; }
-        .open .flap { transform: rotateX(180deg); }
-        .open #letter { opacity: 1; transform: translateY(-100px); z-index: 10; }
+        .open .flap { 
+    position: absolute; 
+    top: 0; 
+    border-left: 125px solid transparent; 
+    border-right: 125px solid transparent; 
+    border-top: 90px solid #b3d1ff; /* Change this hex code to your preferred color */
+    transition: 0.5s; }
     </style>
 </head>
 <body>
