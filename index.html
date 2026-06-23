@@ -1,86 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You</title>
-    <style>
-        :root {
-            --bg-color: #DEEBF7;
-            --envelope-color: #a3cfff;
-            --flap-color: #89cff0; /* Slightly lighter blue to see the triangle */
-            --navy: #2c3e50;
-            --white: #ffffff;
-        }
+<meta charset="UTF-8">
+<title>Birthday Quest</title>
 
-        body { margin: 0; font-family: sans-serif; background: var(--bg-color); display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">
 
-        #login { text-align: center; color: var(--navy); }
-        input { padding: 12px; border: 2px solid var(--envelope-color); border-radius: 10px; margin-bottom: 10px; text-align: center; background: var(--white); }
-        button { padding: 10px 20px; background: var(--envelope-color); border: none; color: white; border-radius: 10px; cursor: pointer; }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
 
-        #envelope-stage { display: none; perspective: 1000px; }
-        .envelope { width: 250px; height: 180px; background: var(--envelope-color); border-radius: 10px; position: relative; cursor: pointer; transition: 0.6s; transform-style: preserve-3d; border: 2px solid var(--white); }
-        .envelope.flipped { transform: rotateY(180deg); }
-        
-        /* This creates the triangle flap */
-        .flap { 
-            position: absolute; top: 0; 
-            border-left: 125px solid transparent; 
-            border-right: 125px solid transparent; 
-            border-top: 90px solid var(--flap-color); /* Visible color */
-            transition: 0.5s; 
-        }
+/* SCREEN FADE */
+.screen {
+    display: none;
+    padding: 40px;
+    animation: fadeIn 0.6s ease;
+}
 
-        .flap::before { content: "🤍🤍🤍🤍🤍🤍"; position: absolute; top: -85px; left: -110px; font-size: 14px; transform: rotate(-35deg); color: #ff6b6b; }
-        .flap::after { content: "🤍🤍🤍🤍🤍🤍"; position: absolute; top: -85px; right: -110px; font-size: 14px; transform: rotate(35deg); color: #ff6b6b; }
-        
-        #back-text { 
-            position: absolute; width: 100%; height: 100%; 
-            display: flex; justify-content: center; align-items: center; 
-            transform: rotateY(180deg); color: var(--navy); font-weight: bold; 
-            backface-visibility: hidden; 
-        }
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
 
-        #letter { position: absolute; top: 10px; left: 10px; width: 230px; height: 160px; background: var(--white); transition: 1s; opacity: 0; z-index: -1; padding: 5px; text-align: center; }
-        .envelope.open #letter { opacity: 1; top: -100px; z-index: 1; }
-    </style>
+/* PASSWORD */
+#passwordScreen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    text-transform: lowercase;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+/* TITLE */
+.title {
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* MINE GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.block {
+    width: 80px;
+    height: 80px;
+    background: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.block:hover {
+    transform: scale(1.05);
+}
+
+.diamond {
+    background: #00e5ff;
+    box-shadow: 0 0 15px #00e5ff;
+}
+
+/* ACHIEVEMENT */
+#achievement {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border: 1px solid gold;
+    color: gold;
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    from {transform: translateX(-50%) scale(0.7); opacity: 0;}
+    to {transform: translateX(-50%) scale(1); opacity: 1;}
+}
+
+/* CHEST */
+.chest {
+    font-size: 80px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.chest:hover {
+    transform: scale(1.1);
+}
+
+/* ENVELOPE (UPDATED COLOR) */
+.envelope {
+    width: 250px;
+    height: 160px;
+    background: #8fd3ff; /* LIGHT BLUE */
+    margin: 40px auto;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 0 25px rgba(143,211,255,0.6);
+    animation: floatIn 0.6s ease;
+}
+
+@keyframes floatIn {
+    from {transform: translateY(15px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 125px solid transparent;
+    border-right: 125px solid transparent;
+    border-top: 80px solid #6bbbe8;
+}
+
+/* LETTER */
+.letter {
+    display: none;
+    background: #fff8dc;
+    color: #000;
+    padding: 20px;
+    margin-top: 20px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 22px;
+    animation: fadeIn 0.6s ease;
+}
+</style>
 </head>
+
 <body>
 
-    <div id="login">
-        <p>What is the name of our playlist?</p>
-        <input type="text" id="pass" placeholder="lowercase only">
-        <br>
-        <button onclick="check()">Enter</button>
-    </div>
+<!-- PASSWORD -->
+<div id="passwordScreen">
+    <h2>Enter Password</h2>
+    <p>(lowercase only)</p>
+    <input id="pass" placeholder="what is the name of our playlist ?">
+    <button onclick="checkPassword()">Enter</button>
+</div>
 
-    <div id="envelope-stage">
-        <div class="envelope" id="env" onclick="this.classList.toggle('flipped')" ondblclick="openEnv()">
-            <div class="flap"></div>
-            <div id="back-text">Happy birthday baby !</div>
-            <div id="letter">
-                <img src="letter.png" style="width:100%; height:80%; object-fit:contain;">
-                <a href="letter.png" download="My_Letter.png" onclick="event.stopPropagation()" style="display: block; font-size: 10px; color: var(--navy);">Download</a>
-            </div>
-        </div>
-        <p style="text-align:center; color: var(--navy); font-size: 0.8em; margin-top: 20px;">
-            Tap once to flip, double-tap to open.
-        </p>
-    </div>
+<!-- GAME -->
+<div id="game" class="screen">
 
-    <script>
-        function check() {
-            if(document.getElementById('pass').value.toLowerCase() === "sweet as cupcake") {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('envelope-stage').style.display = 'block';
-            } else {
-                alert("Not the right playlist!");
-            }
+    <h1 class="title">Happy Birthday, My Love</h1>
+    <p>Find the hidden diamond...</p>
+
+    <div class="grid" id="grid"></div>
+
+</div>
+
+<!-- ACHIEVEMENT -->
+<div id="achievement">🏆 Achievement Unlocked: First Step Completed</div>
+
+<!-- CHEST SCREEN -->
+<div id="chestScreen" class="screen">
+    <div class="chest" onclick="openChest()">📦</div>
+    <p>Open the chest</p>
+</div>
+
+<!-- ENVELOPE -->
+<div id="envelopeScreen" class="screen">
+
+    <p style="font-size:18px;">
+        I hope I make you feel as loved as you make me feel. Here's a little something 🤍
+    </p>
+
+    <div class="envelope" onclick="openLetter()"></div>
+
+    <div class="letter" id="letter">
+        <p><b>From:</b> Amal</p>
+        <p><b>To:</b> Sarim</p>
+        <hr>
+        <p>Your handwritten letter goes here later ❤️</p>
+    </div>
+</div>
+
+<script>
+
+function checkPassword() {
+    let input = document.getElementById("pass").value.trim().toLowerCase();
+
+    if (input === "sweet as cupcake") {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        startGame();
+    } else {
+        alert("Nope. Try again 💙");
+    }
+}
+
+function startGame() {
+    const grid = document.getElementById("grid");
+
+    for (let i = 0; i < 9; i++) {
+        let block = document.createElement("div");
+        block.classList.add("block");
+
+        if (i === 4) {
+            block.classList.add("diamond");
+            block.innerHTML = "💎";
+            block.onclick = foundDiamond;
+        } else {
+            block.innerHTML = "🪨";
+            block.onclick = () => alert("Just stone...");
         }
-        function openEnv() {
-            document.getElementById('env').classList.add('open');
-        }
-    </script>
+
+        grid.appendChild(block);
+    }
+}
+
+function foundDiamond() {
+    document.getElementById("achievement").style.display = "block";
+
+    setTimeout(() => {
+        document.getElementById("achievement").style.display = "none";
+        document.getElementById("game").style.display = "none";
+        document.getElementById("chestScreen").style.display = "block";
+    }, 1500);
+}
+
+function openChest() {
+    document.getElementById("chestScreen").style.display = "none";
+    document.getElementById("envelopeScreen").style.display = "block";
+}
+
+function openLetter() {
+    document.getElementById("letter").style.display = "block";
+}
+
+</script>
+
 </body>
 </html>
