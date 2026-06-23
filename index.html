@@ -8,7 +8,6 @@
         :root {
             --bg-color: #DEEBF7;
             --envelope-color: #a3cfff;
-            --flap-color: #89cff0;
             --navy: #2c3e50;
             --white: #ffffff;
         }
@@ -23,8 +22,25 @@
         .envelope { width: 250px; height: 180px; background: var(--envelope-color); border-radius: 10px; position: relative; cursor: pointer; transition: 0.6s; transform-style: preserve-3d; border: 2px solid var(--white); }
         .envelope.flipped { transform: rotateY(180deg); }
         
-        .flap { position: absolute; top: 0; border-left: 125px solid transparent; border-right: 125px solid transparent; border-top: 90px solid var(--flap-color); transition: 0.5s; }
+        .flap { 
+            position: absolute; top: 0; 
+            border-left: 125px solid transparent; 
+            border-right: 125px solid transparent; 
+            border-top: 90px solid var(--envelope-color); 
+            transition: 0.5s; 
+        }
+
+        .flap::before { content: "❤️❤️❤️"; position: absolute; top: -45px; left: -110px; font-size: 14px; transform: rotate(-35deg); color: #ff6b6b; }
+        .flap::after { content: "❤️❤️❤️"; position: absolute; top: -45px; right: -110px; font-size: 14px; transform: rotate(35deg); color: #ff6b6b; }
         
+        /* The back of the envelope */
+        #back-text { 
+            position: absolute; width: 100%; height: 100%; 
+            display: flex; justify-content: center; align-items: center; 
+            transform: rotateY(180deg); color: var(--navy); font-weight: bold; 
+            backface-visibility: hidden; 
+        }
+
         #letter { position: absolute; top: 10px; left: 10px; width: 230px; height: 160px; background: var(--white); transition: 1s; opacity: 0; z-index: -1; padding: 5px; text-align: center; }
         .envelope.open #letter { opacity: 1; top: -100px; z-index: 1; }
     </style>
@@ -41,9 +57,10 @@
     <div id="envelope-stage">
         <div class="envelope" id="env" onclick="this.classList.toggle('flipped')" ondblclick="openEnv()">
             <div class="flap"></div>
+            <div id="back-text">Happy birthday baby !</div>
             <div id="letter">
                 <img src="letter.png" style="width:100%; height:80%; object-fit:contain;">
-                <a href="letter.png" download="My_Letter.png" style="display: block; font-size: 10px; color: var(--navy);">Download</a>
+                <a href="letter.png" download="My_Letter.png" onclick="event.stopPropagation()" style="display: block; font-size: 10px; color: var(--navy);">Download</a>
             </div>
         </div>
         <p style="text-align:center; color: var(--navy); font-size: 0.8em; margin-top: 20px;">
