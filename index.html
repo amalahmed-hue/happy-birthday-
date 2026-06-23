@@ -1,216 +1,208 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Birthday Quest</title>
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<title>Birthday Quest</title>  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">  <style>  
+body {  
+    margin: 0;  
+    font-family: Arial, sans-serif;  
+    background: #0b0f1a;  
+    color: white;  
+    text-align: center;  
+}  
+  
+/* SCREEN FADE */  
+.screen {  
+    display: none;  
+    padding: 40px;  
+    animation: fadeIn 0.6s ease;  
+}  
+  
+@keyframes fadeIn {  
+    from {opacity: 0; transform: translateY(10px);}  
+    to {opacity: 1; transform: translateY(0);}  
+}  
+  
+/* PASSWORD */  
+#passwordScreen {  
+    height: 100vh;  
+    display: flex;  
+    flex-direction: column;  
+    justify-content: center;  
+    align-items: center;  
+}  
+  
+input {  
+    padding: 10px;  
+    font-size: 16px;  
+    text-transform: lowercase;  
+}  
+  
+button {  
+    padding: 10px 20px;  
+    margin-top: 20px;  
+    cursor: pointer;  
+}  
+  
+/* TITLE */  
+.title {  
+    font-family: 'Press Start 2P', cursive;  
+}  
+  
+/* MINE GRID */  
+.grid {  
+    display: grid;  
+    grid-template-columns: repeat(3, 80px);  
+    gap: 10px;  
+    justify-content: center;  
+    margin-top: 30px;  
+}  
+  
+.block {  
+    width: 80px;  
+    height: 80px;  
+    background: #444;  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    cursor: pointer;  
+    transition: 0.2s;  
+}  
+  
+.block:hover {  
+    transform: scale(1.05);  
+}  
+  
+.diamond {  
+    background: #00e5ff;  
+    box-shadow: 0 0 15px #00e5ff;  
+}  
+  
+/* ACHIEVEMENT */  
+#achievement {  
+    display: none;  
+    position: fixed;  
+    top: 20px;  
+    left: 50%;  
+    transform: translateX(-50%);  
+    background: rgba(0,0,0,0.8);  
+    padding: 12px 18px;  
+    border: 1px solid gold;  
+    color: gold;  
+    animation: pop 0.3s ease;  
+}  
+  
+@keyframes pop {  
+    from {transform: translateX(-50%) scale(0.7); opacity: 0;}  
+    to {transform: translateX(-50%) scale(1); opacity: 1;}  
+}  
+  
+/* CHEST */  
+.chest {  
+    font-size: 80px;  
+    cursor: pointer;  
+    transition: 0.2s;  
+}  
+  
+.chest:hover {  
+    transform: scale(1.1);  
+}  
+  
+/* ENVELOPE (UPDATED COLOR) */  
+.envelope {  
+    width: 250px;  
+    height: 160px;  
+    background: #8fd3ff; /* LIGHT BLUE */  
+    margin: 40px auto;  
+    position: relative;  
+    cursor: pointer;  
+    box-shadow: 0 0 25px rgba(143,211,255,0.6);  
+    animation: floatIn 0.6s ease;  
+}  
+  
+@keyframes floatIn {  
+    from {transform: translateY(15px); opacity: 0;}  
+    to {transform: translateY(0); opacity: 1;}  
+}  
+  
+.envelope::before {  
+    content: "";  
+    position: absolute;  
+    top: 0;  
+    left: 0;  
+    width: 0;  
+    height: 0;  
+    border-left: 125px solid transparent;  
+    border-right: 125px solid transparent;  
+    border-top: 80px solid #6bbbe8;  
+}  
+  
+/* LETTER */  
+.letter {  
+    display: none;  
+    background: #fff8dc;  
+    color: #000;  
+    padding: 20px;  
+    margin-top: 20px;  
+    font-family: 'Great Vibes', cursive;  
+    font-size: 22px;  
+    animation: fadeIn 0.6s ease;  
+}  
+</style>  </head>  <body>  <!-- PASSWORD -->  <div id="passwordScreen">  
+    <h2>Enter Password</h2>  
+    <p>(lowercase only)</p>  
+    <input id="pass" placeholder="what is the name of our playlist ?">  
+    <button onclick="checkPassword()">Enter</button>  
+</div>  <!-- GAME -->  <div id="game" class="screen">  <h1 class="title">Happy Birthday, My Love</h1>  
+<p>Find the hidden diamond...</p>  
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">
+<div class="grid" id="grid"></div>
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0f1a;
-    color: white;
-    text-align: center;
-}
+</div>  <!-- ACHIEVEMENT -->  <div id="achievement">🏆 Achievement Unlocked: First Step Completed</div>  <!-- CHEST SCREEN -->  <div id="chestScreen" class="screen">  
+    <div class="chest" onclick="openChest()">📦</div>  
+    <p>Open the chest</p>  
+</div>  <!-- ENVELOPE -->  <div id="envelopeScreen" class="screen">  <p style="font-size:18px;">  
+    I hope I make you feel as loved as you make me feel. Here's a little something 🤍  
+</p>  
 
-/* SCREEN FADE */
-.screen {
-    display: none;
-    padding: 40px;
-    animation: fadeIn 0.6s ease;
-}
+<div class="envelope" onclick="openLetter()"></div>  
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-/* PASSWORD */
-#passwordScreen {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-input {
-    padding: 10px;
-    font-size: 16px;
-    text-transform: lowercase;
-}
-
-button {
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-}
-
-/* TITLE */
-.title {
-    font-family: 'Press Start 2P', cursive;
-}
-
-/* MINE GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    gap: 10px;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.block {
-    width: 80px;
-    height: 80px;
-    background: #444;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.block:hover {
-    transform: scale(1.05);
-}
-
-.diamond {
-    background: #00e5ff;
-    box-shadow: 0 0 15px #00e5ff;
-}
-
-/* ACHIEVEMENT */
-#achievement {
-    display: none;
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    padding: 12px 18px;
-    border: 1px solid gold;
-    color: gold;
-    animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-    from {transform: translateX(-50%) scale(0.7); opacity: 0;}
-    to {transform: translateX(-50%) scale(1); opacity: 1;}
-}
-
-/* CHEST */
-.chest {
-    font-size: 80px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.chest:hover {
-    transform: scale(1.1);
-}
-
-<div id="envelopeScreen" class="screen">
-
-    <p style="font-size:18px;">
-        I hope I make you feel as loved as you make me feel. Here's a little something 🤍
-    </p>
-
-    <div class="envelope" id="envelope" onclick="toggleEnvelope()"></div>
-
-    <div class="letter" id="letter">
-        <p style="font-family:'Great Vibes', cursive; font-size:28px; margin:0;">
-            Amal
-        </p>
-
-        <p style="opacity:0.7; margin-top:-5px;">
-            to Sarim
-        </p>
-
-        <hr>
-
-        <p>Your handwritten letter goes here later ❤️</p>
-    </div>
+<div class="letter" id="letter">  
+    <p><b>From:</b> Amal</p>  
+    <p><b>To:</b> Sarim</p>  
+    <hr>  
+    <p>Your handwritten letter goes here later ❤️</p>  
 </div>
 
-/* LETTER */
-.letter {
-    display: none;
-    background: #fff8dc;
-    color: #000;
-    padding: 20px;
-    margin-top: 20px;
-    font-family: 'Great Vibes', cursive;
-    font-size: 22px;
-    animation: fadeIn 0.6s ease;
-}
-</style>
-</head>
-
-<body>
-
-<!-- PASSWORD -->
-<div id="passwordScreen">
-    <h2>Enter Password</h2>
-    <p>(lowercase only)</p>
-    <input id="pass" placeholder="what is the name of our playlist ?">
-    <button onclick="checkPassword()">Enter</button>
-</div>
-
-<!-- GAME -->
-<div id="game" class="screen">
-
-    <h1 class="title">Happy Birthday, My Love</h1>
-    <p>Find the hidden diamond...</p>
-
-    <div class="grid" id="grid"></div>
-
-</div>
-
-<!-- ACHIEVEMENT -->
-<div id="achievement">🏆 Achievement Unlocked: First Step Completed</div>
-
-<!-- CHEST SCREEN -->
-<div id="chestScreen" class="screen">
-    <div class="chest" onclick="openChest()">📦</div>
-    <p>Open the chest</p>
-</div>
-
-<!-- ENVELOPE -->
-<div id="envelopeScreen" class="screen">
-
-    <p style="font-size:18px;">
-        I hope I make you feel as loved as you make me feel. Here's a little something 🤍
-    </p>
-
-    <div class="envelope" onclick="openLetter()"></div>
-
-    <div class="letter" id="letter">
-        <p><b>From:</b> Amal</p>
-        <p><b>To:</b> Sarim</p>
-        <hr>
-        <p>Your handwritten letter goes here later ❤️</p>
-    </div>
-</div>
-
-<script>
-
+</div>  <script>  
+  
 function checkPassword() {
     let input = document.getElementById("pass").value.trim().toLowerCase();
 
     if (input === "sweet as cupcake") {
-        document.getElementById("passwordScreen").style.display = "none";
-        document.getElementById("game").style.display = "block";
-        startGame();
+        document.getElementById("passwordScreen").innerHTML =
+            "<p>Unlocking memories...</p>";
+
+        setTimeout(() => {
+            document.getElementById("passwordScreen").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            startGame();
+        }, 1200);
+
     } else {
-        alert("Nope. Try again 💙");
+        alert("Not quite. Try again 💙");
     }
 }
 
 function startGame() {
     const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    const fakeHints = [
+        "nothing here...",
+        "feels warm but empty",
+        "almost...",
+        "static..."
+    ];
 
     for (let i = 0; i < 9; i++) {
         let block = document.createElement("div");
@@ -222,7 +214,10 @@ function startGame() {
             block.onclick = foundDiamond;
         } else {
             block.innerHTML = "🪨";
-            block.onclick = () => alert("Just stone...");
+            block.onclick = () => {
+                block.innerHTML =
+                    fakeHints[Math.floor(Math.random() * fakeHints.length)];
+            };
         }
 
         grid.appendChild(block);
@@ -234,21 +229,56 @@ function foundDiamond() {
 
     setTimeout(() => {
         document.getElementById("achievement").style.display = "none";
-        document.getElementById("game").style.display = "none";
-        document.getElementById("chestScreen").style.display = "block";
+
+        document.body.style.transition = "opacity 0.6s";
+        document.body.style.opacity = 0;
+
+        setTimeout(() => {
+            document.getElementById("game").style.display = "none";
+            document.getElementById("chestScreen").style.display = "block";
+            document.body.style.opacity = 1;
+        }, 600);
+
     }, 1500);
 }
 
 function openChest() {
-    document.getElementById("chestScreen").style.display = "none";
-    document.getElementById("envelopeScreen").style.display = "block";
+    const chest = document.querySelector(".chest");
+    chest.innerHTML = "✨ opening...";
+
+    setTimeout(() => {
+        chest.innerHTML = "📦💫";
+
+        setTimeout(() => {
+            document.getElementById("chestScreen").style.display = "none";
+            document.getElementById("envelopeScreen").style.display = "block";
+            typeLetter();
+        }, 700);
+
+    }, 800);
 }
 
-function openLetter() {
-    document.getElementById("letter").style.display = "block";
-}
+function typeLetter() {
+    const text = `Your presence feels like home in ways I can’t explain.
+Even the silence feels softer when you exist in it.
+I don’t think I’m trying to impress you here...
+I just wanted you to feel what I feel.`;
 
-</script>
+    let i = 0;
+    const letter = document.getElementById("letter");
+    letter.style.display = "block";
+    letter.innerHTML = "";
 
-</body>
-</html>
+    function type() {
+        if (i < text.length) {
+            letter.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, 25);
+        }
+    }
+
+    type();
+                                         }
+  
+</script>  </body>  
+</html>  
