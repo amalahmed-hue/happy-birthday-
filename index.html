@@ -6,10 +6,11 @@
     <title>For You</title>
     <style>
         :root {
-            --pastel-blue: ##C6DBEF;
+            --pastel-blue: #DEEBF7;
             --soft-blue: #a3cfff;
             --navy: #2c3e50;
             --white: #ffffff;
+            --flap-color: #89cff0; /* New color for the flap triangle */
         }
 
         body { margin: 0; font-family: sans-serif; background: var(--pastel-blue); display: flex; justify-content: center; align-items: center; height: 100vh; }
@@ -24,16 +25,53 @@
         .envelope { width: 250px; height: 180px; background: var(--soft-blue); border-radius: 10px; position: relative; cursor: pointer; transition: 0.6s; transform-style: preserve-3d; border: 2px solid var(--white); }
         .envelope.flipped { transform: rotateY(180deg); }
         
-        .flap { position: absolute; top: 0; border-left: 125px solid transparent; border-right: 125px solid transparent; border-top: 90px solid var(--pastel-blue); transition: 0.5s; }
+        .flap { position: absolute; top: 0; border-left: 125px solid transparent; border-right: 125px solid transparent; border-top: 90px solid var(--flap-color); transition: 0.5s; }
         
         /* The Letter Animation */
         #letter { position: absolute; top: 10px; left: 10px; width: 230px; height: 160px; background: var(--white); transition: 1s; opacity: 0; z-index: -1; padding: 5px; }
-        .open .flap { 
-    position: absolute; 
-    top: 0; 
-    border-left: 125px solid transparent; 
-    border-right: 125px solid transparent; 
-    border-top: 90px solid #b3d1ff; /* Change this hex code to your preferred color */
+        
+        /* When open, reveal the letter */
+        .envelope.open #letter { opacity: 1; top: -100px; z-index: 1; }
+    </style>
+</head>
+<body>
+
+    <div id="login">
+        <p>What is the name of our playlist?</p>
+        <input type="text" id="pass" placeholder="lowercase only">
+        <br>
+        <button onclick="check()">Enter</button>
+    </div>
+
+    <div id="envelope-stage">
+        <div class="envelope" id="env" onclick="this.classList.toggle('flipped')" ondblclick="openEnv()">
+            <div class="flap"></div>
+            <div id="letter">
+                <img src="letter.png" style="width:100%; height:100%; object-fit:contain;">
+                <a href="letter.png" download="My_Letter.png" style="display: block; text-align:center; font-size: 12px; color: var(--navy);">Download Letter</a>
+            </div>
+        </div>
+        <p style="text-align:center; color: var(--navy); font-size: 0.8em; margin-top: 20px;">
+            Tap once to flip, double-tap to open.
+        </p>
+    </div>
+
+    <script>
+        function check() {
+            if(document.getElementById('pass').value.toLowerCase() === "sweet as cupcake") {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('envelope-stage').style.display = 'block';
+            } else {
+                alert("Not the right playlist!");
+            }
+        }
+
+        function openEnv() {
+            document.getElementById('env').classList.add('open');
+        }
+    </script>
+</body>
+</html>
     transition: 0.5s; }
     </style>
 </head>
