@@ -14,6 +14,15 @@ body {
     color: white;
     text-align: center;
 }
+    .title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(18px, 3vw, 32px);
+    line-height: 1.5;
+    margin-bottom: 25px;
+    text-shadow:
+        0 0 10px rgba(0,229,255,0.6),
+        0 0 20px rgba(0,229,255,0.4);
+    }
 
 /* screens */
 .screen { display:none; padding:40px; }
@@ -149,7 +158,8 @@ input, button {
 
 <!-- GAME -->
 <div id="game" class="screen">
-    <h1>Find the Diamond</h1>
+    <h1 class="title">Happy Birthday, My Love</h1>
+<p>Find the hidden diamond...</p>
     <div class="grid" id="grid"></div>
 </div>
 
