@@ -1,40 +1,220 @@
-<!DOCTYPE html>  <html lang="en">    <head>    
-<meta charset="UTF-8">    
-<title>Birthday Quest</title>  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">  <style>    
-body {    
-    margin: 0;    
-    font-family: Arial, sans-serif;    
-    background: #0b0f1a;    
-    color: white;    
-    text-align: center;    
-}    /* SCREEN FADE */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Quest</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+/* screens */
 .screen {
-display: none;
-padding: 40px;
-animation: fadeIn 0.6s ease;
+    display: none;
+    padding: 40px;
+}
+
+/* password */
+#passwordScreen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input, button {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.block {
+    width: 80px;
+    height: 80px;
+    background: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.diamond {
+    background: #00e5ff;
+}
+
+/* chest */
+.chest {
+    font-size: 70px;
+    cursor: pointer;
+}
+
+/* envelope */
+.envelope {
+    width: 250px;
+    height: 160px;
+    background: #8fd3ff;
+    margin: 40px auto;
+    position: relative;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 125px solid transparent;
+    border-right: 125px solid transparent;
+    border-top: 80px solid #6bbbe8;
+}
+
+.envelope.open {
+    transform: scale(0.9);
+    opacity: 0.6;
+}
+
+/* letter */
+.letter-box {
+    display: none;
+    margin-top: 20px;
+    animation: fadeIn 0.8s ease;
 }
 
 @keyframes fadeIn {
-from {opacity: 0; transform: translateY(10px);}
-to {opacity: 1; transform: translateY(0);}
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 
-/* PASSWORD */
-#passwordScreen {
-height: 100vh;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
+.letter-img {
+    width: 300px;
+    max-width: 90%;
+    border-radius: 10px;
 }
 
-input {
-padding: 10px;
-font-size: 16px;
-text-transform: lowercase;
+#downloadBtn {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background: white;
+    color: black;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD -->
+<div id="passwordScreen">
+    <h2>Enter Password</h2>
+    <input id="pass" placeholder="playlist name">
+    <button onclick="checkPassword()">Enter</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen">
+    <h1>Find the Diamond</h1>
+    <div class="grid" id="grid"></div>
+</div>
+
+<!-- CHEST -->
+<div id="chestScreen" class="screen">
+    <div class="chest" onclick="openChest()">📦</div>
+</div>
+
+<!-- ENVELOPE -->
+<div id="envelopeScreen" class="screen">
+    <p>Open it 🤍</p>
+
+    <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
+
+    <div class="letter-box" id="letterBox">
+        <img id="letterImage" class="letter-img">
+        <a id="downloadBtn" download="letter.jpg">Download Letter</a>
+    </div>
+</div>
+
+<script>
+
+function checkPassword() {
+    let input = document.getElementById("pass").value.trim().toLowerCase();
+
+    if (input === "sweet as cupcake") {
+        document.getElementById("passwordScreen").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        startGame();
+    } else {
+        alert("Wrong password");
+    }
 }
 
-button {
+function startGame() {
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    for (let i = 0; i < 9; i++) {
+        let block = document.createElement("div");
+        block.classList.add("block");
+
+        if (i === 4) {
+            block.classList.add("diamond");
+            block.innerHTML = "💎";
+            block.onclick = foundDiamond;
+        } else {
+            block.innerHTML = "🪨";
+            block.onclick = () => block.innerHTML = "empty";
+        }
+
+        grid.appendChild(block);
+    }
+}
+
+function foundDiamond() {
+    document.getElementById("game").style.display = "none";
+    document.getElementById("chestScreen").style.display = "block";
+}
+
+function openChest() {
+    document.getElementById("chestScreen").style.display = "none";
+    document.getElementById("envelopeScreen").style.display = "block";
+}
+
+function openEnvelope() {
+    document.getElementById("envelope").classList.add("open");
+
+    setTimeout(() => {
+        document.getElementById("letterBox").style.display = "block";
+
+        let img = document.getElementById("letterImage");
+        let btn = document.getElementById("downloadBtn");
+
+        img.src = "your-letter.jpg"; // change later
+        btn.href = img.src;
+
+    }, 500);
+}
+
+</script>
+
+</body>
+</html>button {
 padding: 10px 20px;
 margin-top: 20px;
 cursor: pointer;
