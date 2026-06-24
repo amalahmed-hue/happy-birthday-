@@ -156,11 +156,13 @@ animation: fadeIn 0.6s ease;
     <p>Open the chest</p>    
 </div>  <!-- ENVELOPE -->  <div id="envelopeScreen" class="screen">  <p style="font-size:18px;">    
     I hope I make you feel as loved as you make me feel. Here's a little something 🤍    
-</p>    <div class="envelope" onclick="openLetter()"></div>    <div class="letter" id="letter">    
-    <p><b>From:</b> Amal</p>    
-    <p><b>To:</b> Sarim</p>    
-    <hr>    
-    <p>Your handwritten letter goes here later ❤️</p>    
+</p>    <div class="envelope-container">
+    <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
+
+    <div class="letter-slide" id="letterSlide">
+        <img id="letterImage" class="letter-img">
+        <a id="downloadBtn" download="letter.jpg">Download Letter</a>
+    </div>
 </div>  </div>  <script>    function checkPassword() {
 let input = document.getElementById("pass").value.trim().toLowerCase();
 
