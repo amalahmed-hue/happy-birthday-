@@ -7,206 +7,133 @@
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
-    /* dark cinematic background effect */
-#envelopeScreen {
-    position: relative;
-}
-
-#envelopeScreen::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.6s;
-}
-
-/* when active */
-#envelopeScreen.cinematic::before {
-    opacity: 0.6;
-}
-
-/* scene */
-.scene {
-    perspective: 1000px;
-    margin-top: 50px;
-}
-
-/* envelope base */
-.envelope {
-    width: 260px;
-    height: 170px;
-    margin: auto;
-    position: relative;
-    cursor: pointer;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
-}
-
-/* body */
-.envelope .body {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #8fd3ff;
-    border-radius: 6px;
-    box-shadow: 0 0 30px rgba(143,211,255,0.4);
-}
-
-/* flap */
-.envelope .flap {
-    position: absolute;
-    width: 0;
-    height: 0;
-    top: 0;
-    left: 0;
-    border-left: 130px solid transparent;
-    border-right: 130px solid transparent;
-    border-top: 90px solid #6bbbe8;
-    transform-origin: top;
-    transition: transform 0.8s ease;
-}
-
-/* OPEN ANIMATION */
-.envelope.open .flap {
-    transform: rotateX(180deg);
-}
-
-.envelope.open {
-    transform: scale(0.98) translateY(-10px);
-    filter: drop-shadow(0 0 20px rgba(143,211,255,0.5));
-}
-
-/* LETTER cinematic rise */
-.letter-box {
-    display: none;
-    margin-top: 30px;
-    animation: rise 1s ease forwards;
-}
-
-@keyframes rise {
-    from {
-        transform: translateY(60px);
-        opacity: 0;
-        filter: blur(4px);
-    }
-    to {
-        transform: translateY(-10px);
-        opacity: 1;
-        filter: blur(0);
-    }
-        }
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background: #0b0f1a;
     color: white;
     text-align: center;
 }
 
 /* screens */
-.screen {
-    display: none;
-    padding: 40px;
-}
+.screen { display:none; padding:40px; }
 
 /* password */
 #passwordScreen {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 }
 
 input, button {
-    padding: 10px;
-    margin-top: 10px;
+    padding:10px;
+    margin-top:10px;
 }
 
 /* grid */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 80px);
-    gap: 10px;
-    justify-content: center;
-    margin-top: 30px;
+    display:grid;
+    grid-template-columns:repeat(3,80px);
+    gap:10px;
+    justify-content:center;
+    margin-top:30px;
 }
 
 .block {
-    width: 80px;
-    height: 80px;
-    background: #444;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    width:80px;
+    height:80px;
+    background:#444;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
 }
 
-.diamond {
-    background: #00e5ff;
-}
+.diamond { background:#00e5ff; }
 
 /* chest */
-.chest {
-    font-size: 70px;
-    cursor: pointer;
+.chest { font-size:70px; cursor:pointer; }
+
+/* ===== CINEMATIC ENVELOPE ===== */
+
+#envelopeScreen::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background:black;
+    opacity:0;
+    transition:0.6s;
+    pointer-events:none;
 }
 
-/* envelope */
+#envelopeScreen.cinematic::before {
+    opacity:0.6;
+}
+
+.scene { perspective:1000px; }
+
 .envelope {
-    width: 250px;
-    height: 160px;
-    background: #8fd3ff;
-    margin: 40px auto;
-    position: relative;
-    cursor: pointer;
-    transition: 0.5s;
+    width:260px;
+    height:170px;
+    margin:auto;
+    position:relative;
+    cursor:pointer;
+    transition:0.6s;
 }
 
-.envelope::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-left: 125px solid transparent;
-    border-right: 125px solid transparent;
-    border-top: 80px solid #6bbbe8;
+.envelope .body {
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:#8fd3ff;
+}
+
+.envelope .flap {
+    position:absolute;
+    width:0;height:0;
+    border-left:130px solid transparent;
+    border-right:130px solid transparent;
+    border-top:90px solid #6bbbe8;
+    transform-origin:top;
+    transition:0.8s;
 }
 
 .envelope.open {
-    transform: scale(0.9);
-    opacity: 0.6;
+    transform:scale(0.95) translateY(-10px);
+    filter:drop-shadow(0 0 20px #8fd3ff);
+}
+
+.envelope.open .flap {
+    transform:rotateX(180deg);
 }
 
 /* letter */
 .letter-box {
-    display: none;
-    margin-top: 20px;
-    animation: fadeIn 0.8s ease;
+    display:none;
+    margin-top:30px;
+    animation:rise 1s ease;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
+@keyframes rise {
+    from {transform:translateY(60px); opacity:0;}
+    to {transform:translateY(-10px); opacity:1;}
 }
 
 .letter-img {
-    width: 300px;
-    max-width: 90%;
-    border-radius: 10px;
+    width:300px;
+    max-width:90%;
+    border-radius:10px;
 }
 
 #downloadBtn {
-    display: block;
-    margin-top: 10px;
-    padding: 10px;
-    background: white;
-    color: black;
-    text-decoration: none;
+    display:block;
+    margin-top:10px;
+    padding:10px;
+    background:white;
+    color:black;
+    text-decoration:none;
 }
 </style>
 </head>
@@ -216,7 +143,7 @@ input, button {
 <!-- PASSWORD -->
 <div id="passwordScreen">
     <h2>Enter Password</h2>
-    <input id="pass" placeholder=" What is our playlist name ?">
+    <input id="pass" placeholder="playlist name">
     <button onclick="checkPassword()">Enter</button>
 </div>
 
@@ -233,9 +160,14 @@ input, button {
 
 <!-- ENVELOPE -->
 <div id="envelopeScreen" class="screen">
-    <p>I hope I can make you feel as loved as I feel by you 🤍</p>
+    <p>I hope you feel loved 🤍</p>
 
-    <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
+    <div class="scene">
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+            <div class="body"></div>
+            <div class="flap"></div>
+        </div>
+    </div>
 
     <div class="letter-box" id="letterBox">
         <img id="letterImage" class="letter-img">
@@ -247,7 +179,6 @@ input, button {
 
 function checkPassword() {
     let input = document.getElementById("pass").value.trim().toLowerCase();
-
     if (input === "sweet as cupcake") {
         document.getElementById("passwordScreen").style.display = "none";
         document.getElementById("game").style.display = "block";
@@ -261,286 +192,54 @@ function startGame() {
     const grid = document.getElementById("grid");
     grid.innerHTML = "";
 
-    for (let i = 0; i < 9; i++) {
-        let block = document.createElement("div");
-        block.classList.add("block");
+    for (let i=0;i<9;i++) {
+        let b=document.createElement("div");
+        b.className="block";
 
-        if (i === 4) {
-            block.classList.add("diamond");
-            block.innerHTML = "💎";
-            block.onclick = foundDiamond;
+        if(i===4){
+            b.classList.add("diamond");
+            b.innerHTML="💎";
+            b.onclick=foundDiamond;
         } else {
-            block.innerHTML = "🪨";
-            block.onclick = () => block.innerHTML = "empty";
+            b.innerHTML="🪨";
+            b.onclick=()=>b.innerHTML="empty";
         }
 
-        grid.appendChild(block);
+        grid.appendChild(b);
     }
 }
 
-function foundDiamond() {
-    document.getElementById("game").style.display = "none";
-    document.getElementById("chestScreen").style.display = "block";
+function foundDiamond(){
+    document.getElementById("game").style.display="none";
+    document.getElementById("chestScreen").style.display="block";
 }
 
-function openChest() {
-    document.getElementById("chestScreen").style.display = "none";
-    document.getElementById("envelopeScreen").style.display = "block";
+function openChest(){
+    document.getElementById("chestScreen").style.display="none";
+    document.getElementById("envelopeScreen").style.display="block";
 }
 
-function openEnvelope() {
-    document.getElementById("envelope").classList.add("open");
+function openEnvelope(){
+    const env=document.getElementById("envelope");
+    const screen=document.getElementById("envelopeScreen");
+    const box=document.getElementById("letterBox");
 
-    setTimeout(() => {
-        document.getElementById("letterBox").style.display = "block";
+    screen.classList.add("cinematic");
+    env.classList.add("open");
 
-        let img = document.getElementById("letterImage");
-        let btn = document.getElementById("downloadBtn");
+    setTimeout(()=>{
+        box.style.display="block";
 
-        img.src = "your-letter.jpg"; // change later
-        btn.href = img.src;
+        const img=document.getElementById("letterImage");
+        const btn=document.getElementById("downloadBtn");
 
-    }, 500);
+        img.src="your-letter.jpg";
+        btn.href=img.src;
+
+    },900);
 }
 
 </script>
 
 </body>
-</html>button {
-padding: 10px 20px;
-margin-top: 20px;
-cursor: pointer;
-}
-
-/* TITLE */
-.title {
-font-family: 'Press Start 2P', cursive;
-}
-
-/* MINE GRID */
-.grid {
-display: grid;
-grid-template-columns: repeat(3, 80px);
-gap: 10px;
-justify-content: center;
-margin-top: 30px;
-}
-
-.block {
-width: 80px;
-height: 80px;
-background: #444;
-display: flex;
-justify-content: center;
-align-items: center;
-cursor: pointer;
-transition: 0.2s;
-}
-
-.block:hover {
-transform: scale(1.05);
-}
-
-.diamond {
-background: #00e5ff;
-box-shadow: 0 0 15px #00e5ff;
-}
-
-/* ACHIEVEMENT */
-#achievement {
-display: none;
-position: fixed;
-top: 20px;
-left: 50%;
-transform: translateX(-50%);
-background: rgba(0,0,0,0.8);
-padding: 12px 18px;
-border: 1px solid gold;
-color: gold;
-animation: pop 0.3s ease;
-}
-
-@keyframes pop {
-from {transform: translateX(-50%) scale(0.7); opacity: 0;}
-to {transform: translateX(-50%) scale(1); opacity: 1;}
-}
-
-/* CHEST */
-.chest {
-font-size: 80px;
-cursor: pointer;
-transition: 0.2s;
-}
-
-.chest:hover {
-transform: scale(1.1);
-}
-
-/* ENVELOPE (UPDATED COLOR) /
-.envelope {
-width: 250px;
-height: 160px;
-background: #8fd3ff; / LIGHT BLUE */
-margin: 40px auto;
-position: relative;
-cursor: pointer;
-box-shadow: 0 0 25px rgba(143,211,255,0.6);
-animation: floatIn 0.6s ease;
-}
-
-@keyframes floatIn {
-from {transform: translateY(15px); opacity: 0;}
-to {transform: translateY(0); opacity: 1;}
-}
-
-.envelope::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 0;
-height: 0;
-border-left: 125px solid transparent;
-border-right: 125px solid transparent;
-border-top: 80px solid #6bbbe8;
-}
-
-/* LETTER */
-.letter {
-display: none;
-background: #fff8dc;
-color: #000;
-padding: 20px;
-margin-top: 20px;
-font-family: 'Great Vibes', cursive;
-font-size: 22px;
-animation: fadeIn 0.6s ease;
-}
-</style>  </head>  <body>  <!-- PASSWORD -->  <div id="passwordScreen">
-<h2>Enter Password</h2>
-<p>(lowercase only)</p>
-<input id="pass" placeholder="what is the name of our playlist ?">
-<button onclick="checkPassword()">Enter</button>
-
-</div>  <!-- GAME -->  <div id="game" class="screen">  <h1 class="title">Happy Birthday, My Love</h1>    
-<p>Find the hidden diamond...</p>    <div class="grid" id="grid"></div>  </div>  <!-- ACHIEVEMENT -->  <div id="achievement">🏆 Achievement Unlocked: First Step Completed</div>  <!-- CHEST SCREEN -->  <div id="chestScreen" class="screen">    
-    <div class="chest" onclick="openChest()">📦</div>    
-    <p>Open the chest</p>    
-</div>  <!-- ENVELOPE -->  <div id="envelopeScreen" class="screen">  <p style="font-size:18px;">    
-    I hope I make you feel as loved as you make me feel. Here's a little something 🤍    
-</p>    <div class="envelope-container">
-    <div class="envelope" id="envelope" onclick="openEnvelope()"></div>
-
-    <div class="letter-slide" id="letterSlide">
-        <img id="letterImage" class="letter-img">
-        <a id="downloadBtn" download="letter.jpg">Download Letter</a>
-    </div>
-</div>  </div>  <script>    function checkPassword() {
-let input = document.getElementById("pass").value.trim().toLowerCase();
-
-if (input === "sweet as cupcake") {  
-    document.getElementById("passwordScreen").innerHTML =  
-        "<p>Unlocking memories...</p>";  
-
-    setTimeout(() => {  
-        document.getElementById("passwordScreen").style.display = "none";  
-        document.getElementById("game").style.display = "block";  
-        startGame();  
-    }, 1200);  
-
-} else {  
-    alert("Not quite. Try again 💙");  
-}
-
-}
-
-function startGame() {
-const grid = document.getElementById("grid");
-grid.innerHTML = "";
-
-const fakeHints = [  
-    "nothing here...",  
-    "feels warm but empty",  
-    "almost...",  
-    "static..."  
-];  
-
-for (let i = 0; i < 9; i++) {  
-    let block = document.createElement("div");  
-    block.classList.add("block");  
-
-    if (i === 4) {  
-        block.classList.add("diamond");  
-        block.innerHTML = "💎";  
-        block.onclick = foundDiamond;  
-    } else {  
-        block.innerHTML = "🪨";  
-        block.onclick = () => {  
-            block.innerHTML =  
-                fakeHints[Math.floor(Math.random() * fakeHints.length)];  
-        };  
-    }  
-
-    grid.appendChild(block);  
-}
-
-}
-
-function foundDiamond() {
-document.getElementById("achievement").style.display = "block";
-
-setTimeout(() => {  
-    document.getElementById("achievement").style.display = "none";  
-
-    document.body.style.transition = "opacity 0.6s";  
-    document.body.style.opacity = 0;  
-
-    setTimeout(() => {  
-        document.getElementById("game").style.display = "none";  
-        document.getElementById("chestScreen").style.display = "block";  
-        document.body.style.opacity = 1;  
-    }, 600);  
-
-}, 1500);
-
-}
-
-function openChest() {
-const chest = document.querySelector(".chest");
-chest.innerHTML = "✨ opening...";
-
-setTimeout(() => {  
-    chest.innerHTML = "📦💫";  
-
-    setTimeout(() => {  
-        document.getElementById("chestScreen").style.display = "none";  
-        document.getElementById("envelopeScreen").style.display = "block";  
-        typeLetter();  
-    }, 700);  
-
-}, 800);
-
-}
-
-function typeLetter() {
-const text = Your presence feels like home in ways I can’t explain.   Even the silence feels softer when you exist in it.   I don’t think I’m trying to impress you here...   I just wanted you to feel what I feel.;
-
-let i = 0;  
-const letter = document.getElementById("letter");  
-letter.style.display = "block";  
-letter.innerHTML = "";  
-
-function type() {  
-    if (i < text.length) {  
-        letter.innerHTML += text.charAt(i);  
-        i++;  
-        setTimeout(type, 25);  
-    }  
-}  
-
-type();  
-                                     }
-
-</script>  </body>
-
 </html>
